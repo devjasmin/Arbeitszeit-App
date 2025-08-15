@@ -5,58 +5,67 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ArbeitszeitApp</title>
   </head>
+   <style>
+     @font-face { 
+       font-family: "GodgerDisco-Regular"; 
+        src:url("fonts/GodgerDisco-Regular.otf");
+     }
 
-  <style>
-    body {
-      font-family: Arial, Helvetica, sans-serif;
-      font-size: 1rem;
-      background-color: antiquewhite;
-      color: black;
-      width: 5rem;
-
-      button {
-        margin: 0.5rem;
-        padding: 0.5rem;
-        border-radius: 5px;
-        font-size: 1rem;
-        background-color: rgb(188, 188, 243);
-      }
+    body h2 {
+      font-family: "GodgerDisco-Regular";
+      font-size: 2.5rem;
     }
+  
+  body {
+     font-family: Arial, Helvetica, sans-serif;
+     font-size: 1rem;
+    background-color: antiquewhite;
+    color: black;
+    width: 5rem;
+  }
+    
+    button {
+    margin: 0.5rem;
+    padding: 0.5rem;
+    border-radius: 5px;
+    font-size: 1rem;
+    background-color: rgb(188, 188, 243);
+  }
+   
+  
   </style>
-  <body>
-    <h1>Arbeitszeiten Jasmin Longa</h1>
-    <button onclick="startTimer()">Arbeitsbeginn</button>
-    <button onclick="stoppTimer()">Arbeitsende</button>
-    <button onclick="pausenStart()">Pausenstart</button>
-    <button onclick="pausenStopp()">Pausenende</button>
-    <button onclick="formatTime()">Überzeit</button>
+
+    <h2>Arbeitszeiterfassung</h2>
+    Arbeitsbeginn <input type="text" id="beginnWork" /> 
+    Pausenstart   <input type="text" id="pausenStart" />
+    Pausenende    <input type="text" id="pausenEnde" />
+    Arbeitsende   <input type="text" id="endWork" /> <br /><br />
+
     <button onclick="save()">Speichern</button>
   </body>
 
   <script>
-    let startTime;
+    let arbeitszeiten = [];
 
-    function startTimer() {
-      startTime = Date.now();
-      console.log("Timer gestartet um", new Date(startTime));
-    }
+    function save() {
+      let zeiten = {
+        Arbeitsbeginn: document.getElementById("beginnWork").value,
+        Pausenstart: document.getElementById("pausenStart").value,
+        Pausenende: document.getElementById("pausenEnde").value,
+        Arbeitsende: document.getElementById("endWork").value,
+      };
+    
 
-    function stoppTimer() {
-      const endTime = Date.now();
-      const elapsedTime = endTime - startTime;
-      console.log("Timer gestoppt um", new Date(endTime));
-    }
-    function formatTime(milliseconds) {
-      const totalSeconds = Math.floor(milliseconds / 1000);
-      const minutes = Math.floor(totalSeconds / 60);
-      const seconds = totalSeconds % 60;
-      return `${minutes.toString().padStart(2, "0")}:${seconds
-        .toString()
-        .padStart(2, "0")}`;
-    }
+    console.log(zeiten);
 
-    function formatTime() {
-      console.log("Überzeit", formatTime(elapsedTime));
-    }
-  </script>
+    arbeitszeiten.push(zeiten);
+     localStorage.setItem("arbeitszeiten", JSON.stringify(arbeitszeiten));
+
+     // Felder leeren
+    document.getElementById("beginnWork").value = "";
+    document.getElementById("pausenStart").value = "";
+    document.getElementById("pausenEnde").value = "";
+    document.getElementById("endWork").value = "";
+}
+    </script>
 </html>
