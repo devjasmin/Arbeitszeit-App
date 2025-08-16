@@ -23,6 +23,10 @@
     color: black;
     width: 5rem;
   }
+  input {
+    margin-bottom: 1rem;
+    line-height: 1rem;
+  }
     
     button {
     margin: 0.5rem;
@@ -36,6 +40,7 @@
   </style>
 
     <h2>Arbeitszeiterfassung</h2>
+    Datum         <input type="text" id="date" />
     Arbeitsbeginn <input type="text" id="beginnWork" /> 
     Pausenstart   <input type="text" id="pausenStart" />
     Pausenende    <input type="text" id="pausenEnde" />
@@ -49,6 +54,7 @@
 
     function save() {
       let zeiten = {
+        Datum:      document.getElementById("date").value,
         Arbeitsbeginn: document.getElementById("beginnWork").value,
         Pausenstart: document.getElementById("pausenStart").value,
         Pausenende: document.getElementById("pausenEnde").value,
@@ -62,6 +68,7 @@
      localStorage.setItem("arbeitszeiten", JSON.stringify(arbeitszeiten));
 
      // Felder leeren
+     document.getElementById("date").value = "";
     document.getElementById("beginnWork").value = "";
     document.getElementById("pausenStart").value = "";
     document.getElementById("pausenEnde").value = "";
