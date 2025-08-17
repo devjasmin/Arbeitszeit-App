@@ -4,40 +4,11 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ArbeitszeitApp</title>
-  </head>
-   <style>
-     @font-face { 
-       font-family: "GodgerDisco-Regular"; 
-        src:url("fonts/GodgerDisco-Regular.otf");
-     }
+<link rel="stylesheet" href="style.css">
+<script src="main.js"></script>
 
-    body h2 {
-      font-family: "GodgerDisco-Regular";
-      font-size: 2.5rem;
-    }
-  
-  body {
-     font-family: Arial, Helvetica, sans-serif;
-     font-size: 1rem;
-    background-color: antiquewhite;
-    color: black;
-    width: 5rem;
-  }
-  input {
-    margin-bottom: 1rem;
-    line-height: 1rem;
-  }
+  </head>
     
-    button {
-    margin: 0.5rem;
-    padding: 0.5rem;
-    border-radius: 5px;
-    font-size: 1rem;
-    background-color: rgb(188, 188, 243);
-  }
-   
-  
-  </style>
 
     <h2>Arbeitszeiterfassung</h2>
     Datum         <input type="text" id="date" />
@@ -49,30 +20,5 @@
     <button onclick="save()">Speichern</button>
   </body>
 
-  <script>
-    let arbeitszeiten = [];
-
-    function save() {
-      let zeiten = {
-        Datum:      document.getElementById("date").value,
-        Arbeitsbeginn: document.getElementById("beginnWork").value,
-        Pausenstart: document.getElementById("pausenStart").value,
-        Pausenende: document.getElementById("pausenEnde").value,
-        Arbeitsende: document.getElementById("endWork").value,
-      };
-    
-
-    console.log(zeiten);
-
-    arbeitszeiten.push(zeiten);
-     localStorage.setItem("arbeitszeiten", JSON.stringify(arbeitszeiten));
-
-     // Felder leeren
-     document.getElementById("date").value = "";
-    document.getElementById("beginnWork").value = "";
-    document.getElementById("pausenStart").value = "";
-    document.getElementById("pausenEnde").value = "";
-    document.getElementById("endWork").value = "";
-}
-    </script>
+  
 </html>
