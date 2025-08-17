@@ -4,21 +4,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ArbeitszeitApp</title>
-<link rel="stylesheet" href="style.css">
-<script src="main.js"></script>
-
+    <link rel="stylesheet" href="style.css" />
+    <script src="main.js"></script>
   </head>
-    
 
+  <body>
     <h2>Arbeitszeiterfassung</h2>
-    Datum         <input type="text" id="date" />
-    Arbeitsbeginn <input type="text" id="beginnWork" /> 
-    Pausenstart   <input type="text" id="pausenStart" />
-    Pausenende    <input type="text" id="pausenEnde" />
-    Arbeitsende   <input type="text" id="endWork" /> <br /><br />
+    <div class="form-container"></div>
+    Datum <input type="text" id="date" /> Arbeitsbeginn
+    <input type="text" id="beginnWork" /> Pausenstart
+    <input type="text" id="pausenStart" /> Pausenende
+    <input type="text" id="pausenEnde" /> Arbeitsende
+    <input type="text" id="endWork" /> <br />
 
+    <button onclick="berechneArbeitsDauer()">Berechnen</button> <br />
+    <div id="ausgabe"></div>
+    <br />
     <button onclick="save()">Speichern</button>
   </body>
-
-  
 </html>
