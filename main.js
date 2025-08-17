@@ -9,6 +9,14 @@ function save() {
     Arbeitsende: document.getElementById("endWork").value,
   };
 
+  // Arbeitszeiten berechnen und ins Objekt speichern
+  zeiten.Arbeitsdauer = berechneArbeitsDauer(
+    zeiten.Arbeitsbeginn,
+    zeiten.Pausenstart,
+    zeiten.Pausenende,
+    zeiten.Arbeitsende
+  );
+
   console.log(zeiten);
 
   arbeitszeiten.push(zeiten);
@@ -69,4 +77,34 @@ function berechneArbeitsDauer() {
   document.getElementById(
     "ausgabe"
   ).innerHTML = `Arbeiten: ${stunden}h ${restMinuten}min`;
+}
+function print() {
+  const daten = JSON.parse(localStorage.getItem("arbeitszeiten")) || [];
+  let html = "<table border='2' cellspacing='0' cellpadding='5'>";
+  html +=
+    "<tr><th>Datum</th><th>Arbeitsbeginn</th><th>Pausenstart</th><th>Pausenende</th><th>Arbeitsende</th><th>Arbeitsdauer</th</tr>";
+
+  // Hilfsfunktion für Zeit zu Date
+  function toDate(time) {
+    if (!time) return null;
+    const [h, m] = time.split(":").map(Number);
+    return new Date(0, 0, 0, h, m);
+  }
+
+  daten.forEach((e) => {
+    html += `<tr>
+      <td>${e.Datum}</td>
+      <td>${e.Arbeitsbeginn}</td>
+      <td>${e.Pausenstart}</td>
+      <td>${e.Pausenende}</td>
+      <td>${e.Arbeitsende}</td>
+      <td>${e.Arbeitsdauer}</td>
+    </tr>`;
+  });
+
+  html += "</table>";
+  document.getElementById("printArea").innerHTML = html;
+
+  // Druckdialog öffnen
+  window.print();
 }
