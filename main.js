@@ -1,16 +1,22 @@
-let arbeitszeiten = JSON.parse(localStorage.getItem("arbeitszeiten")) || [];
+const arbeitszeiten = JSON.parse(localStorage.getItem("arbeitszeiten")) || [];
+
+const dateOfDayInput = document.getElementById("date");
+const beginnInput = document.getElementById("beginnWork");
+const startMittagsPauseInput = document.getElementById("beginnBreak");
+const endMittagsPauseInput = document.getElementById("endBreak");
+const endInput = document.getElementById("endWork");
 
 function save() {
   const zeiten = {
-    Datum: document.getElementById("date").value,
-    Arbeitsbeginn: document.getElementById("beginnWork").value,
-    Pausenstart: document.getElementById("pausenStart").value,
-    Pausenende: document.getElementById("pausenEnde").value,
-    Arbeitsende: document.getElementById("endWork").value,
+    Datum: dateOfDayInput.value,
+    Arbeitsbeginn: beginnInput.value,
+    Pausenstart: startMittagsPauseInput.value,
+    Pausenende: endMittagsPauseInput.value,
+    Arbeitsende: endInput.value,
   };
 
   // Arbeitszeiten berechnen und ins Objekt speichern
-  zeiten.Arbeitsdauer = berechneArbeitsDauer(
+  zeiten.Arbeitsdauer = calculate(
     zeiten.Arbeitsbeginn,
     zeiten.Pausenstart,
     zeiten.Pausenende,
@@ -23,25 +29,26 @@ function save() {
   localStorage.setItem("arbeitszeiten", JSON.stringify(arbeitszeiten));
 
   // Felder leeren
-  document.getElementById("date").value = "";
-  document.getElementById("beginnWork").value = "";
-  document.getElementById("pausenStart").value = "";
-  document.getElementById("pausenEnde").value = "";
-  document.getElementById("endWork").value = "";
+  dateOfDayInput.value = "";
+  beginnInput.value = "";
+  startMittagsPauseInput.value = "";
+  endMittagsPauseInput.value = "";
+  endInput.value = "";
 
   // auch die alte Ausgabe leeren
-  document.getElementById("ausgabe").innerHTML = "";
+  document.getElementById("output").innerHTML = "";
 }
 
-function berechneArbeitsDauer() {
+function calculate() {
   // hole die zuletzt eingegebenen Zeiten (oder aus dem Array)
-  const start = document.getElementById("beginnWork").value;
-  const pausenStart = document.getElementById("pausenStart").value;
-  const pausenEnde = document.getElementById("pausenEnde").value;
-  const ende = document.getElementById("endWork").value;
+  const dateOfDayInput = document.getElementById("date");
+  const beginnInput = document.getElementById("beginnWork").value;
+  const startMittagsPauseInput = document.getElementById("beginnBreak");
+  const endMittagsPauseInput = document.getElementById("endBreak");
+  const endInput = document.getElementById("endWork").value;
 
-  if (!start || !ende) {
-    document.getElementById("ausgabe").innerHTML =
+  if (!beginnInput || !endInput) {
+    document.getElementById("output").innerHTML =
       "Bitte Arbeitsbeginn und Arbeitsende eingeben";
     return;
   }
@@ -53,8 +60,8 @@ function berechneArbeitsDauer() {
     return new Date(0, 0, 0, h, m);
   }
 
-  const startDate = toDate(start);
-  const endeDate = toDate(ende);
+  const startDate = toDate(beginnInput);
+  const endeDate = toDate(endInput);
 
   // Grunddauer in Minuten
   let minuten = (endeDate - startDate) / 60000;
@@ -75,7 +82,7 @@ function berechneArbeitsDauer() {
   const restMinuten = Math.round(minuten % 60);
 
   document.getElementById(
-    "ausgabe"
+    "output"
   ).innerHTML = `Arbeiten: ${stunden}h ${restMinuten}min`;
 }
 function print() {
@@ -91,14 +98,14 @@ function print() {
     return new Date(0, 0, 0, h, m);
   }
 
-  daten.forEach((e) => {
+  arbeitszeiten.forEach((eintrag) => {
     html += `<tr>
-      <td>${e.Datum}</td>
-      <td>${e.Arbeitsbeginn}</td>
-      <td>${e.Pausenstart}</td>
-      <td>${e.Pausenende}</td>
-      <td>${e.Arbeitsende}</td>
-      <td>${e.Arbeitsdauer}</td>
+      <td>${eintrag.Datum}</td>
+      <td>${eintrag.Arbeitsbeginn}</td>
+      <td>${eintrag.Pausenstart}</td>
+      <td>${eintrag.Pausenende}</td>
+      <td>${eintrag.Arbeitsende}</td>
+      <td>${eintrag.Arbeitsdauer}</td>
     </tr>`;
   });
 
