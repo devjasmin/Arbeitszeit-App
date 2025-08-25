@@ -23,8 +23,6 @@ function save() {
     zeiten.Arbeitsende
   );
 
-  console.log(zeiten);
-
   arbeitszeiten.push(zeiten);
   localStorage.setItem("arbeitszeiten", JSON.stringify(arbeitszeiten));
 
@@ -41,7 +39,6 @@ function save() {
 
 function calculate() {
   // hole die zuletzt eingegebenen Zeiten (oder aus dem Array)
-  const dateOfDayInput = document.getElementById("date");
   const beginnInput = document.getElementById("beginnWork").value;
   const startMittagsPauseInput = document.getElementById("beginnBreak");
   const endMittagsPauseInput = document.getElementById("endBreak");
@@ -55,9 +52,12 @@ function calculate() {
 
   // kleine Hilfsfunktion: HH:00 -> Date
   function toDate(time) {
-    if (!time) return null;
-    const [h, m] = time.split(":").map(Number);
-    return new Date(0, 0, 0, h, m);
+    if (typeof time !== "string") {
+      // console.error("Invalid time format:", time);
+      return null;
+    }
+    const [hours, minutes] = time.split(":");
+    return new Date(0, 0, 0, parseInt(hours), parseInt(minutes));
   }
 
   const startDate = toDate(beginnInput);
@@ -68,9 +68,9 @@ function calculate() {
   if (minuten < 0) minuten += 24 * 60; // falls über Mitternacht
 
   // Pause abziehen (falls vorhanden)
-  if (pausenStart && pausenEnde) {
-    const pauseS = toDate(pausenStart);
-    const pauseE = toDate(pausenEnde);
+  if (startMittagsPauseInput && endMittagsPauseInput) {
+    const pauseS = toDate(startMittagsPauseInput);
+    const pauseE = toDate(endMittagsPauseInput);
     let pauseMin = (pauseE - pauseS) / 60000;
     if (pauseMin < 0) pauseMin += 24 * 60; // theoretisch, falls Pause über Mitternacht
     minuten -= pauseMin;
@@ -83,35 +83,54 @@ function calculate() {
 
   document.getElementById(
     "output"
-  ).innerHTML = `Arbeiten: ${stunden}h ${restMinuten}min`;
+  ).innerHTML = `gearbeitete Stunden: ${stunden}h ${restMinuten}min`;
 }
 function print() {
-  const daten = JSON.parse(localStorage.getItem("arbeitszeiten")) || [];
-  let html = "<table border='2' cellspacing='0' cellpadding='5'>";
-  html +=
-    "<tr><th>Datum</th><th>Arbeitsbeginn</th><th>Pausenstart</th><th>Pausenende</th><th>Arbeitsende</th><th>Arbeitsdauer</th</tr>";
+  const arbeitszeiten = JSON.parse(localStorage.getItem("arbeitszeiten")) || [];
 
-  // Hilfsfunktion für Zeit zu Date
-  function toDate(time) {
-    if (!time) return null;
-    const [h, m] = time.split(":").map(Number);
-    return new Date(0, 0, 0, h, m);
-  }
+  const table = document.createElement("table");
+  table.style.border = "2px solid black";
+  table.style.borderCollapse = "collapse";
+  table.style.padding = "5px";
+
+  const cell = document.createElement("td");
+  cell.style.border = "1px solid black";
+  cell.style.padding = "5px";
+
+  // Kopfzeile
+  const headerRow = document.createElement("tr");
+  [
+    "Datum",
+    "Arbeitsbeginn",
+    "Pausenstart",
+    "Pausenende",
+    "Arbeitsende",
+    "Arbeitsdauer",
+  ].forEach((label) => {
+    const cell = document.createElement("td"); // td statt th, wenn du keine Kopfzeilen willst
+    cell.textContent = label;
+    headerRow.appendChild(cell);
+  });
+  table.appendChild(headerRow);
 
   arbeitszeiten.forEach((eintrag) => {
-    html += `<tr>
-      <td>${eintrag.Datum}</td>
-      <td>${eintrag.Arbeitsbeginn}</td>
-      <td>${eintrag.Pausenstart}</td>
-      <td>${eintrag.Pausenende}</td>
-      <td>${eintrag.Arbeitsende}</td>
-      <td>${eintrag.Arbeitsdauer}</td>
-    </tr>`;
+    const row = document.createElement("tr");
+    [
+      eintrag.Datum,
+      eintrag.Arbeitsbeginn,
+      eintrag.Pausenstart,
+      eintrag.Pausenende,
+      eintrag.Arbeitsende,
+      eintrag.Arbeitsdauer,
+    ].forEach((val) => {
+      const cell = document.createElement("td");
+      cell.textContent = val || "";
+      row.appendChild(cell);
+    });
+    table.appendChild(row);
   });
 
-  html += "</table>";
-  document.getElementById("printArea").innerHTML = html;
-
-  // Druckdialog öffnen
-  window.print();
+  const printArea = document.getElementById("printArea");
+  printArea.innerHTML = ""; // alte Tabelle löschen
+  printArea.appendChild(table);
 }

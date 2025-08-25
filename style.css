@@ -14,7 +14,7 @@ body {
   font-size: 1rem;
   background-color: antiquewhite;
   color: black;
-  width: 1rem;
+  width: 10rem;
   height: auto;
 
   .form-container {
@@ -25,7 +25,7 @@ body {
   }
 
   input {
-    margin-bottom: 1rem;
+    margin-bottom: 2rem;
     line-height: 1rem;
   }
 
